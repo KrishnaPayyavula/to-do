@@ -1,0 +1,30 @@
+{
+  "name": "to-do",
+  "version": "1.0.0",
+  "description": "to-do application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KrishnaPayyavula/to-do.git"
+  },
+  "author": "KrishnaPayyavula",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KrishnaPayyavula/to-do/issues"
+  },
+  "homepage": "https://github.com/KrishnaPayyavula/to-do#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.5"
+  }
+}
