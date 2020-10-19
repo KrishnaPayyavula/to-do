@@ -12,6 +12,7 @@ export default function Modal(props) {
     lastModified: "",
     status: "",
     media: [],
+    file: null,
     targetDate: "",
   };
   const [modalShow, setModalShow] = useState(false);
@@ -59,19 +60,41 @@ export default function Modal(props) {
   };
   const onSubmission = (e) => {
     e.preventDefault();
-    console.log("final_____", noteData);
+    const data = new FormData();
+    data.append('file', e.target.value);
+
+    console.log("final_____", noteData, data);
     if (currentActionTitle === "Edit note") {
       //update note //async function
+
     } else {
       //create note//async function
+      // fetch('/api/tasks/saveTask',{
+      //   method:"POST",
+      //   headers:{
+      //     "Content-Type":"application/json"
+      //   }
+      // })
     }
   };
   const handleNoteChanges = (key, value) => {
     if (!isEditing) {
       setIsEditing(true);
     }
-    setNoteData({ ...noteData, [key]: value });
+    if (key == "file") {
+      setNoteData({ ...noteData, [key]: value.files[0] })
+      console.log("File Data :->", value.files[0])
+    } else {
+      setNoteData({ ...noteData, [key]: value });
+    }
+
   };
+
+  const onFileUpload = async () => {
+    const formData = new FormData();
+    formData.append("File", noteData.file);
+    console.log("Form Data :->", formData)
+  }
   return (
     <div
       className={`${ModalStyles.modal} ${modalShow ? ModalStyles.show : null}`}
@@ -86,7 +109,7 @@ export default function Modal(props) {
           />
         </div>
         <div className="container">
-          <form className="was-validated" onSubmit={(e) => onSubmission(e)}>
+          <form className="was-validated" encType="multipart/form-data" onSubmit={(e) => onSubmission(e)}>
             <div className="form-group">
               <label htmlFor="noteTitle">Title</label>
               <input
@@ -122,8 +145,14 @@ export default function Modal(props) {
                 className="form-control"
                 id="noteMedia"
                 name="noteMedia"
+                onChange={(e) =>
+                  handleNoteChanges("file", e.target)
+                }
                 required
               />
+              <button onClick={() => onFileUpload()}>
+                Upload!
+                </button>
             </div>
             <div className="form-group">
               <label htmlFor="noteTargetDate">Target Date</label>

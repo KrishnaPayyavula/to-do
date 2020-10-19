@@ -6,4 +6,5 @@ router.use((req, res, next) => {
 })
 
 router.route('/getTasks').get(tasksController.apiGetTasks);
+router.route("/saveTask").post(tasksController.apiSaveTask)
 module.exports = router

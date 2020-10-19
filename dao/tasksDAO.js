@@ -9,7 +9,7 @@ class RequirementsDAO {
         }
 
         try {
-            __TASKSDB = await connection.db("micro_requirements_db");
+            __TASKSDB = await connection.db("tasks");
 
         } catch (error) {
             console.log("Unable to establish the connection to the TasksDB", error);

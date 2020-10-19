@@ -34,18 +34,33 @@
   padding: 5px;
   background-color: rgb(245, 245, 245);
 }
-
-.addNoteBtn {
-  padding: 7px 20px;
-  margin: 0px 10px;
+.searchInput {
+  padding: 0px 10px;
+  border: 1px solid #d8d6d6;
+  border-radius: 6px;
+  box-shadow: -1px 1px 20px #d3c9c9;
+}
+.addNoteBtn,
+.deleteNoteBtn {
+  padding: 7px 17px;
+  margin: 0px 6px;
   font-weight: 500;
-  background: #32bc32;
   color: white;
+  font-size: 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
-
+.addNoteBtn:disabled,
+.deleteNoteBtn:disabled {
+  cursor: not-allowed;
+}
+.addNoteBtn {
+  background: #4ea34e;
+}
+.deleteNoteBtn {
+  background: #df513e;
+}
 .notesWrapper {
   display: flex;
   flex-wrap: wrap;

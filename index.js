@@ -23,7 +23,7 @@ const MongoClient = require("mongodb").MongoClient;
 const PORT = process.env.PORT;
 
 MongoClient.connect(
-    process.env.URL,
+    process.env.MONGO_DB_CLUSTER_URL,
     { useNewUrlParser: true, useUnifiedTopology: true },
     function (err, client) {
         if (err) {

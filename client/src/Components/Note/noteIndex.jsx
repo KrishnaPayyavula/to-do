@@ -35,6 +35,12 @@ export default function Note(props) {
     temp.currentAction = "delete";
     setAppState(temp);
   };
+  const handleSelection = (checked) => {
+    setSelected(checked);
+    let temp = { ...appState };
+    temp.selectedNotes.push(noteData._id);
+    setAppState(temp);
+  };
   const [selected, setSelected] = useState(false);
   return (
     <div className={NoteStyles.note} onClick={triggerModal}>
@@ -42,10 +48,11 @@ export default function Note(props) {
         <div className="d-flex align-items-center mb-3">
           <input
             type="checkbox"
-            name=""
-            id=""
             checked={selected}
-            onChange={(e) => setSelected(e.target.checked)}
+            onChange={(e) => {
+              handleSelection(e.target.checked);
+            }}
+            onClick={(e) => e.stopPropagation()}
           />
           <h3 className={NoteStyles.noteTitle} title={noteData.title}>
             {noteData.title}

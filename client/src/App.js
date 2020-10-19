@@ -17,12 +17,66 @@ function App() {
     show: false,
     selectedNotes: [],
   });
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  useEffect(() => {
+    if (isSearching) {
+      let stored = JSON.parse(localStorage.getItem("notesList"));
+      let filtered = [];
+      if (searchInput.trim() !== "") {
+        if (stored.length > 0) {
+          stored.forEach((note) => {
+            if (String(note.title).search(searchInput) > -1) {
+              filtered.push(note);
+            }
+          });
+          console.log("filtered", filtered);
+          setNoteList(filtered);
+        }
+      } else {
+        setNoteList(stored);
+      }
+      setIsSearching(false);
+    }
+  }, [isSearching, searchInput, noteList]);
+
+  const handleSearch = (value) => {
+    if (!isSearching) {
+      setIsSearching(true);
+    }
+    setSearchInput(value);
+  };
+
   const addNote = () => {
     let temp = { ...appState };
     temp.show = true;
     temp.currentAction = "add";
     setAppState(temp);
   };
+  const removeSelectedNotes = () => {
+    //remove selected
+    //below process is temporary, here we will make API call to delete selected
+    console.log("hit", appState.selectedNotes);
+    if (appState.selectedNotes.length > 0) {
+      let selected = [...appState.selectedNotes];
+      let deleteCounts = 0;
+      let current = [...noteList];
+      selected.forEach((id) => {
+        current.forEach((note, index) => {
+          if (note._id === id) {
+            current.splice(index, 1);
+            deleteCounts++;
+            return;
+          }
+        });
+      });
+      setNoteList(current);
+      if (deleteCounts === selected.length) {
+        setAppState({ ...appState, selectedNotes: [] });
+      }
+    }
+  };
+
   useEffect(() => {
     setIsLoading(true);
     //async function
@@ -58,14 +112,20 @@ function App() {
     ];
     setTimeout(() => {
       setNoteList(mock);
+      localStorage.setItem("notesList", JSON.stringify(mock));
       setIsLoading(false);
     }, 1000);
   }, []);
-
+  //Below is temp and need to make api call
   useEffect(() => {
-    console.log("cuurent appState", appState);
-  }, [appState]);
-
+    if (appState.activeNoteId !== "" && appState.currentAction === "delete") {
+      let newList = noteList.filter(
+        (note) => note._id !== appState.activeNoteId
+      );
+      setNoteList(newList);
+      setAppState({ ...appState, activeNoteId: "", currentAction: "" });
+    }
+  }, [appState, noteList]);
   return (
     <AppContext.Provider value={[appState, setAppState]}>
       <div className={styles.parent}>
@@ -73,9 +133,22 @@ function App() {
           <div className={styles.leftNav}>
             <h2>To-Do</h2>
             <div className="d-flex ml-3">
-              <input type="text" placeholder="search" />
+              <input
+                type="text"
+                placeholder="search"
+                className={styles.searchInput}
+                value={searchInput}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
               <button className={styles.addNoteBtn} onClick={addNote}>
                 Add
+              </button>
+              <button
+                className={styles.deleteNoteBtn}
+                onClick={removeSelectedNotes}
+                disabled={!appState.selectedNotes.length > 0}
+              >
+                Delete
               </button>
             </div>
           </div>
